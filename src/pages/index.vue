@@ -1,4 +1,7 @@
+<script setup lang="ts">
+import { StoriesOfRemoteAntiquity } from "@/utils/musics";
+</script>
+
 <template>
-  Index
-  <GLink to="/demo">Demo</GLink>
+  <InteractiveMusic v-bind="StoriesOfRemoteAntiquity" />
 </template>
