@@ -7,6 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ControlPlaying: typeof import('./../src/components/control/ControlPlaying.vue')['default']
+    ControlVolume: typeof import('./../src/components/control/ControlVolume.vue')['default']
     GLink: typeof import('./../src/components/GLink.vue')['default']
     InteractiveMusic: typeof import('./../src/components/InteractiveMusic.vue')['default']
     NA: typeof import('naive-ui')['NA']
@@ -18,9 +20,11 @@ declare module 'vue' {
     NLoadingBarProvider: typeof import('naive-ui')['NLoadingBarProvider']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NNotificationProvider: typeof import('naive-ui')['NNotificationProvider']
+    NPopover: typeof import('naive-ui')['NPopover']
     NRadioButton: typeof import('naive-ui')['NRadioButton']
     NRadioGroup: typeof import('naive-ui')['NRadioGroup']
     NSlider: typeof import('naive-ui')['NSlider']
+    NText: typeof import('naive-ui')['NText']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

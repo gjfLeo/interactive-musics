@@ -1,5 +1,5 @@
 import type { Ref } from "vue";
-import { executeTransition } from "@vueuse/core";
+import { TransitionPresets, executeTransition } from "@vueuse/core";
 import type { InteractiveMusicInfo } from "@/utils/types";
 
 export function useInteractiveMusicControls(info: InteractiveMusicInfo, audios: Ref<HTMLAudioElement[]>) {
@@ -14,23 +14,22 @@ export function useInteractiveMusicControls(info: InteractiveMusicInfo, audios: 
     get: () => displayCurrentTime.value,
     set: value => controlCurrentTime.value = value,
   });
-  const mainVolume = ref(1);
+  const volume = ref(1);
   const endTime = ref(Number.POSITIVE_INFINITY);
 
   onMounted(() => {
     audios.value.forEach((audio) => {
       const scene = audio.dataset.scene!;
-      const index = info.tracks.findIndex(t => t.scene === scene)!;
       const track = info.tracks.find(t => t.scene === scene)!;
 
       const {
         duration: trackDuration,
         playing: trackPlaying,
         currentTime: trackCurrentTime,
-        volume,
-      } = useMediaControls(audio);
+        volume: trackVolume,
+      } = useMediaControls(ref(audio));
       const start = track.start;
-      const trackVolume = ref(index === 0 ? 1 : index === 1 ? 0.5 : 0);
+      const trackVolumeWeight = ref(scene === currentScene.value ? 1 : 0);
 
       whenever(
         () => trackDuration.value > 0,
@@ -59,24 +58,24 @@ export function useInteractiveMusicControls(info: InteractiveMusicInfo, audios: 
 
       watch(
         currentScene,
-        (currentTrackName) => {
-          if (currentTrackName === track.scene) {
-            executeTransition(trackVolume, trackVolume.value, 1, {
-              duration: trackPlaying.value ? 1000 * (1 - trackVolume.value) : 0,
+        (currentScene) => {
+          if (currentScene === scene) {
+            executeTransition(trackVolumeWeight, trackVolumeWeight.value, 1, {
+              duration: trackPlaying.value ? 1000 * (1 - trackVolumeWeight.value) : 0,
+              transition: TransitionPresets.linear,
             });
           }
           else {
-            executeTransition(trackVolume, trackVolume.value, 0, {
-              duration: trackPlaying.value ? 1000 * trackVolume.value : 0,
+            executeTransition(trackVolumeWeight, trackVolumeWeight.value, 0, {
+              duration: trackPlaying.value ? 1000 * trackVolumeWeight.value : 0,
+              transition: TransitionPresets.linear,
             });
           }
         },
       );
       watch(
-        [mainVolume, trackVolume],
-        () => {
-          volume.value = mainVolume.value * trackVolume.value;
-        },
+        [volume, trackVolumeWeight],
+        () => trackVolume.value = volume.value * trackVolumeWeight.value,
         { immediate: true },
       );
     });
@@ -97,6 +96,7 @@ export function useInteractiveMusicControls(info: InteractiveMusicInfo, audios: 
     playing,
     currentTime,
     endTime,
+    volume,
     trackControls,
   };
 }

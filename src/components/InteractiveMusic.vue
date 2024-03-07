@@ -7,19 +7,42 @@
       :src="track.src"
     />
   </div>
-  <div flex="~ items-center gap-4">
-    <NButton circle @click="playing = !playing">
-      <template #icon>
-        <div :class="playing ? 'i-carbon:pause' : 'i-carbon:play'" />
-      </template>
-    </NButton>
-    <NRadioGroup v-model:value="currentScene">
-      <NRadioButton
-        v-for="track in tracks" :key="track.scene"
-        :value="track.scene" :label="track.scene"
-      />
-    </NRadioGroup>
-    <div class="w-full">
+  <div class="flex flex-col gap-4">
+    <div>
+      <NRadioGroup v-model:value="currentScene">
+        <NRadioButton
+          v-for="track in tracks" :key="track.scene"
+          :value="track.scene" :label="track.scene"
+        />
+      </NRadioGroup>
+    </div>
+    <div>
+      <NRadioGroup v-model:value="currentScene">
+        <NRadioButton
+          v-for="track in tracks" :key="track.scene"
+          :value="track.scene" :label="track.scene"
+        />
+      </NRadioGroup>
+    </div>
+    <div>
+      <NRadioGroup v-model:value="currentScene">
+        <NRadioButton
+          v-for="track in tracks" :key="track.scene"
+          :value="track.scene" :label="track.scene"
+        />
+      </NRadioGroup>
+    </div>
+    <div>
+      <NRadioGroup v-model:value="currentScene">
+        <NRadioButton
+          v-for="track in tracks" :key="track.scene"
+          :value="track.scene" :label="track.scene"
+        />
+      </NRadioGroup>
+    </div>
+    <div flex="~ gap-4 items-center">
+      <ControlPlaying v-model="playing" />
+      <ControlVolume v-model="volume" />
       <NSlider v-model:value="currentTime" :max="endTime" :step="0.01" />
     </div>
   </div>
@@ -37,5 +60,7 @@ const props = defineProps<InteractiveMusicInfo>();
 
 const audios = ref<HTMLAudioElement[]>([]);
 
-const { playing, currentScene, currentTime, endTime } = useInteractiveMusicControls(props, audios);
+const { playing, currentScene, currentTime, endTime, volume } = useInteractiveMusicControls(props, audios);
+
+volume.value = 0.5;
 </script>
