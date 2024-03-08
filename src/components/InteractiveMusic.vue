@@ -4,36 +4,14 @@
       v-for="track in tracks" :key="track.scene"
       ref="audios"
       :data-scene="track.scene"
-      :src="track.src"
     />
   </div>
-  <div class="flex flex-col gap-4">
+  <div flex="~ col gap-4">
     <div>
-      <NRadioGroup v-model:value="currentScene">
-        <NRadioButton
-          v-for="track in tracks" :key="track.scene"
-          :value="track.scene" :label="track.scene"
-        />
-      </NRadioGroup>
+      <pre>{{ props }}</pre>
     </div>
     <div>
-      <NRadioGroup v-model:value="currentScene">
-        <NRadioButton
-          v-for="track in tracks" :key="track.scene"
-          :value="track.scene" :label="track.scene"
-        />
-      </NRadioGroup>
-    </div>
-    <div>
-      <NRadioGroup v-model:value="currentScene">
-        <NRadioButton
-          v-for="track in tracks" :key="track.scene"
-          :value="track.scene" :label="track.scene"
-        />
-      </NRadioGroup>
-    </div>
-    <div>
-      <NRadioGroup v-model:value="currentScene">
+      <NRadioGroup v-model:value="scene">
         <NRadioButton
           v-for="track in tracks" :key="track.scene"
           :value="track.scene" :label="track.scene"
@@ -54,13 +32,13 @@
 
 <script setup lang="ts">
 import { useInteractiveMusicControls } from "@/composables/interactive-music-controls";
-import type { InteractiveMusicInfo } from "@/utils/types";
+import type { IMMusic } from "@/utils/types";
 
-const props = defineProps<InteractiveMusicInfo>();
+const props = defineProps<IMMusic>();
 
 const audios = ref<HTMLAudioElement[]>([]);
 
-const { playing, currentScene, currentTime, endTime, volume } = useInteractiveMusicControls(props, audios);
+const { playing, scene, currentTime, endTime, volume } = useInteractiveMusicControls(props, audios);
 
 volume.value = 0.5;
 </script>

@@ -1,4 +1,10 @@
-export interface InteractiveMusicInfo {
+export interface IMAlbum {
+  title: string;
+  titleEn?: string;
+  musics: IMMusic[];
+}
+
+export interface IMMusic {
   tracks: IMTrack[];
 }
 
