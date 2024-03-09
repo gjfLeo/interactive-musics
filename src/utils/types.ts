@@ -13,10 +13,10 @@ export interface IMTrack {
   title: string;
   titleEn: string;
   start: number;
-  credits?: string[][];
   links: {
     ne: number;
     qq?: string;
   };
+  credits?: string[][];
   note?: string;
 }
