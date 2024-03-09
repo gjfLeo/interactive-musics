@@ -1,6 +1,8 @@
 import type { Ref } from "vue";
 import { TransitionPresets, executeTransition } from "@vueuse/core";
 import type { IMMusic } from "@/utils/types";
+import { getTrackSrc } from "@/utils/song";
+import useStore from "@/stores/main";
 
 function useCurrentTime() {
   const displayCurrentTime = ref(0);
@@ -15,7 +17,7 @@ function useCurrentTime() {
 function updateEndTime(endTime: Ref<number>, trackDuration: Ref<number>, trackStart: number) {
   whenever(
     () => trackDuration.value > 0,
-    () => endTime.value = Math.min(endTime.value, trackDuration.value - trackStart),
+    () => endTime.value = Math.min(endTime.value === 0 ? Number.POSITIVE_INFINITY : endTime.value, trackDuration.value - trackStart),
     { once: true },
   );
 }
@@ -80,18 +82,26 @@ function bindTrackVolume(volume: Ref<number>, trackVolume: Ref<number>, trackVol
 }
 
 export function useInteractiveMusicControls(info: IMMusic, audios: Ref<HTMLAudioElement[]>) {
-  const trackControls = computed(() => audios.value.map(audio => useMediaControls(audio)));
+  const store = useStore();
 
-  const scene = ref(info.tracks[0].scene);
+  const trackControls = computed(() => audios.value.map(audio => useMediaControls(ref(audio))));
+
+  const scene = computed({
+    get: () => store.scene,
+    set: scene => store.scene = scene,
+  });
   const playing = ref(false);
   const { currentTime, displayCurrentTime, controlCurrentTime } = useCurrentTime();
   const volume = ref(1);
-  const endTime = ref(Number.POSITIVE_INFINITY);
+  const endTime = ref(0);
 
   watch(info, () => {
-    scene.value = info.tracks[0].scene;
+    if (!info.tracks.some(track => track.scene === scene.value)) {
+      scene.value = info.tracks[0].scene;
+    }
     playing.value = false;
     currentTime.value = 0;
+    endTime.value = 0;
     clearBindings();
 
     nextTick(() => {
@@ -106,7 +116,7 @@ export function useInteractiveMusicControls(info: IMMusic, audios: Ref<HTMLAudio
           playing: trackPlaying,
           currentTime: trackCurrentTime,
           volume: trackVolume,
-        } = useMediaControls(audio, { src: track.src });
+        } = useMediaControls(audio, { src: getTrackSrc(track.links) });
 
         updateEndTime(endTime, trackDuration, trackStart);
         bindTrackPlaying(playing, trackPlaying);
@@ -118,7 +128,7 @@ export function useInteractiveMusicControls(info: IMMusic, audios: Ref<HTMLAudio
   }, { immediate: true });
 
   whenever(
-    () => currentTime.value >= endTime.value,
+    () => endTime.value > 0 && currentTime.value >= endTime.value,
     () => {
       playing.value = false;
       currentTime.value = 0;

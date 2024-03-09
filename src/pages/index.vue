@@ -1,11 +1,14 @@
 <template>
-  <NTreeSelect
-    :options="options"
-    :override-default-node-click-behavior="handleNodeClick"
-    :render-label="handleRenderLabel"
-    @update:value="handleSelect"
-  />
-  <InteractiveMusic v-bind="music" />
+  <div flex="~ col gap-4">
+    <NTreeSelect
+      v-model:value="store.musicKey"
+      :options="options"
+      :override-default-node-click-behavior="handleNodeClick"
+      :render-label="handleRenderLabel"
+      @update:value="store.scene = ''"
+    />
+    <InteractiveMusic v-if="music" v-bind="music" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -13,6 +16,10 @@ import type { TreeSelectOption, TreeSelectOverrideNodeClickBehavior, TreeSelectR
 import { NText } from "naive-ui";
 import albums from "@/utils/albums";
 import type { IMMusic } from "@/utils/types";
+import useStore from "@/stores/main";
+
+const store = useStore();
+const music = computed(() => albums.flatMap(album => album.musics).find(music => music.tracks[0].title === store.musicKey));
 
 const options: TreeSelectOption[] = albums.map((album) => {
   return {
@@ -20,10 +27,10 @@ const options: TreeSelectOption[] = albums.map((album) => {
     label: album.title,
     titleEn: album.titleEn,
     children: album.musics.map((music) => {
-      const title = music.tracks.map(track => track.title).join("\u2006/\u2006");
       return {
-        key: title,
-        label: title,
+        key: music.tracks[0].title,
+        label: music.tracks.map(track => track.title).join(" / "),
+        value: music.tracks[0].title,
         music,
       };
     }),
@@ -44,8 +51,8 @@ const handleRenderLabel: TreeSelectRenderLabel = ({ option }) => {
         class: "flex flex-col",
       },
       [
-        h(NText, () => (option.music as IMMusic).tracks.map(track => track.title).join("\u2006/\u2006")),
-        h(NText, { class: "text-xs", depth: 3 }, () => (option.music as IMMusic).tracks.map(track => track.titleEn).join("\u2006/\u2006")),
+        h(NText, () => (option.music as IMMusic).tracks.map(track => track.title).join(" / ")),
+        h(NText, { class: "text-xs", depth: 3 }, () => (option.music as IMMusic).tracks.map(track => track.titleEn).join(" / ")),
       ],
     );
   }
@@ -62,11 +69,4 @@ const handleRenderLabel: TreeSelectRenderLabel = ({ option }) => {
     );
   }
 };
-
-const music = ref(albums[0].musics[0]);
-function handleSelect(key: string, option: TreeSelectOption) {
-  if (option.music) {
-    music.value = option.music as IMMusic;
-  }
-}
 </script>

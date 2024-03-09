@@ -42,6 +42,7 @@ export default defineConfig({
         "@vueuse/core",
         "vitest",
         VueRouterAutoImports,
+        "pinia",
         {
           "naive-ui": ["useDialog", "useMessage", "useNotification", "useLoadingBar"],
           "@unhead/vue": ["useHead"],
