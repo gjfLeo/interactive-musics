@@ -13,6 +13,6 @@ describe("getTrackSrc", () => {
 
   it("报错", () => {
     const links = {};
-    expect(getTrackSrc(links)).toThrow("没有可用的音频资源");
+    expect(() => getTrackSrc(links)).toThrow("没有可用的音频资源");
   });
 });
