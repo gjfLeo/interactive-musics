@@ -20,8 +20,6 @@ import albums from "@/utils/albums";
 import type { IMAlbum, IMMusic } from "@/utils/types";
 import useStore from "@/stores/main";
 
-useHead({ title: "互动音乐" });
-
 const store = useStore();
 const music = computed(() => albums.flatMap(album => album.musics).find(music => music.tracks[0].title === store.musicKey));
 
