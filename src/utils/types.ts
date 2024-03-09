@@ -14,8 +14,9 @@ export interface IMTrack {
   titleEn: string;
   start: number;
   links: {
-    ne: number;
+    ne?: number;
     qq?: string;
+    fandom?: string;
   };
   credits?: string[][];
   note?: string;
