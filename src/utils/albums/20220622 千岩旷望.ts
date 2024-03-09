@@ -3,8 +3,10 @@ import type { IMAlbum } from "../types";
 export default {
   title: "千岩旷望",
   titleEn: "Millelith's Watch",
+  image: "https://p2.music.126.net/ragydFCtXKrHRusb28RxLQ==/109951167558151638.jpg",
   musics: [
     {
+      subtitle: "无名遗迹",
       tracks: [
         {
           scene: "探索1",
@@ -68,6 +70,7 @@ export default {
       ],
     },
     {
+      subtitle: "地下水泽",
       tracks: [
         {
           scene: "探索1",
@@ -127,6 +130,7 @@ export default {
       ],
     },
     {
+      subtitle: "荧光狭道",
       tracks: [
         {
           scene: "探索1",
@@ -185,6 +189,7 @@ export default {
       ],
     },
     {
+      subtitle: "天钉区域",
       tracks: [
         {
           scene: "探索",
@@ -268,4 +273,4 @@ export default {
     //   ],
     // },
   ],
-} satisfies IMAlbum;
+} as IMAlbum;

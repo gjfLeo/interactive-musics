@@ -1,10 +1,12 @@
 export interface IMAlbum {
   title: string;
   titleEn: string;
+  image?: string;
   musics: IMMusic[];
 }
 
 export interface IMMusic {
+  subtitle?: string;
   tracks: IMTrack[];
 }
 

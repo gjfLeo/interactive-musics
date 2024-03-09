@@ -13,7 +13,7 @@
       <NSlider v-model:value="currentTime" :max="endTime" :step="0.01" :tooltip="false" />
       <NText class="shrink-0"><NTime :time="currentTime * 1000" format="mm:ss" />&#x2006;/&#x2006;<NTime :time="endTime * 1000" format="mm:ss" /></NText>
     </div>
-    <NTabs v-model:value="scene" type="card" placement="left" animated>
+    <NTabs v-model:value="scene" type="line" placement="left" animated>
       <NTabPane
         v-for="track in tracks" :key="track.scene"
         :name="track.scene" :tab="track.scene"

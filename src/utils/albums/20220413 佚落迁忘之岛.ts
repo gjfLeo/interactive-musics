@@ -3,8 +3,10 @@ import type { IMAlbum } from "../types";
 export default {
   title: "佚落迁忘之岛",
   titleEn: "Islands of the Lost and Forgotten",
+  image: "https://p2.music.126.net/ItGglGmjUh3x7HL2qHkurQ==/109951167277673214.jpg",
   musics: [
     {
+      subtitle: "梦想乐土之歿",
       tracks: [
         {
           title: "雷霆的威光",
@@ -60,4 +62,4 @@ export default {
       ],
     },
   ],
-} satisfies IMAlbum;
+} as IMAlbum;
