@@ -56,7 +56,7 @@ const handleRenderPrefix: TreeSelectRenderPrefix = ({ option }) => {
       return h(NImage, {
         class: "w-12 h-12",
         previewDisabled: true,
-        src: album.image,
+        src: `${album.image}?param=100y100`,
         alt: album.title,
       });
     }
