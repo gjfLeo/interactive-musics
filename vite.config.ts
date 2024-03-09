@@ -16,6 +16,8 @@ import postcssUnoCss from "@unocss/postcss";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: process.env.APP_BASE ?? "/",
+
   plugins: [
 
     // https://github.com/posva/unplugin-vue-router
